@@ -1,0 +1,16 @@
+{
+  "name": "devsecops-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A tiny static site used to learn a DevSecOps CI/CD pipeline",
+  "scripts": {
+    "lint": "eslint src scripts",
+    "build": "node scripts/build.js",
+    "start": "npx --yes serve dist -l 8080"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0"
+  }
+}

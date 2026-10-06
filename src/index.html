@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- GitHub Pages can't set HTTP headers, so the CSP also lives here -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Pipeline line</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="board">
+    <h1>Pipeline line</h1>
+    <p class="lede">Every push rides this route. It only reaches production if it clears the signal at stop 11.</p>
+    <dl class="ticket" aria-live="polite">
+      <div><dt>Commit</dt><dd id="commit">loading</dd></div>
+      <div><dt>Run</dt><dd id="run">loading</dd></div>
+      <div><dt>Built</dt><dd id="built">loading</dd></div>
+    </dl>
+  </header>
+
+  <main>
+    <ol class="route">
+      <li><h2>Developer writes code</h2><p>Work happens on a branch, locally.</p></li>
+      <li><h2>Push to GitHub</h2><p>A push or pull request to main sets off the run.</p></li>
+      <li><h2>GitHub Actions starts</h2><p>The workflow in .github/workflows picks up the event.</p></li>
+      <li><h2>Prepare the environment</h2><p>Check out the repo, install Node and dependencies.</p></li>
+      <li><h2>Scan the code</h2><p>Gitleaks looks for secrets, Semgrep for risky code, npm audit for vulnerable packages.</p></li>
+      <li><h2>Build the application</h2><p>Lint, build the site, package it into an nginx container.</p></li>
+      <li><h2>Scan the container</h2><p>Trivy checks the image for known CVEs.</p></li>
+      <li><h2>Deploy to staging</h2><p>The container runs inside the runner as a throwaway test site.</p></li>
+      <li><h2>Attack the running app</h2><p>OWASP ZAP crawls staging and probes it like an attacker would.</p></li>
+      <li><h2>Collect all findings</h2><p>Every report is gathered into one bundle.</p></li>
+      <li class="signal"><h2>Security decision</h2><p>The gate counts findings against the policy in scripts/security-gate.sh.</p></li>
+    </ol>
+
+    <div class="branches">
+      <section class="branch pass">
+        <h2>Pass: production</h2>
+        <p>The build is published to GitHub Pages. You're looking at it.</p>
+      </section>
+      <section class="branch fail">
+        <h2>Fail: fix issues</h2>
+        <p>Production is blocked and an issue is opened with a link to the findings.</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

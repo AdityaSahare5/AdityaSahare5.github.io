@@ -1,0 +1,145 @@
+/* Route-map styling: the pipeline drawn as a transit line with a signal at the end */
+:root {
+  --paper: #f3f5f8;
+  --ink: #1e2638;
+  --muted: #5a6478;
+  --line: #3c64b1;
+  --go: #2e8b57;
+  --stop: #c8433a;
+  --amber: #e3a02b;
+  --card: #ffffff;
+  --font: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #151b29;
+    --ink: #e7ebf3;
+    --muted: #9aa4b8;
+    --line: #6f93dc;
+    --go: #4fbf84;
+    --stop: #ec6b62;
+    --card: #1e2638;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+.board, main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Header: the destination board */
+.board { padding-top: 3.5rem; padding-bottom: 2.5rem; }
+h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 9vw, 4.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--line);
+}
+.lede { max-width: 34rem; margin: 1rem 0 1.75rem; color: var(--muted); }
+
+.ticket {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  border-left: 0.35rem solid var(--amber);
+  background: var(--card);
+}
+.ticket dt { font-size: 0.8rem; color: var(--muted); }
+.ticket dd { margin: 0; font-weight: 700; }
+
+/* The route: a thick line with a station dot at each stop */
+.route {
+  --dot: 1.25rem;
+  list-style: none;
+  counter-reset: stop;
+  margin: 0;
+  padding: 0 0 0 3.25rem;
+  position: relative;
+}
+.route::before {               /* the track */
+  content: "";
+  position: absolute;
+  left: 1.1rem;
+  top: 0.4rem;
+  bottom: 0;
+  width: 0.45rem;
+  border-radius: 1rem;
+  background: var(--line);
+}
+.route li {
+  counter-increment: stop;
+  position: relative;
+  padding-bottom: 1.6rem;
+}
+.route li::before {            /* the station */
+  content: counter(stop);
+  position: absolute;
+  left: -3.25rem;
+  top: 0;
+  width: 2.65rem;
+  height: 2.65rem;
+  display: grid;
+  place-items: center;
+  border: 0.3rem solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+.route h2 { margin: 0; padding-top: 0.45rem; font-size: 1.15rem; font-weight: 700; }
+.route p { margin: 0.2rem 0 0; color: var(--muted); max-width: 32rem; }
+
+/* Stop 11: the signal, filled amber */
+.route li.signal::before {
+  border-color: var(--amber);
+  background: var(--amber);
+  color: #1e2638;
+}
+
+/* The fork after the signal */
+.branches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 0.5rem 0 4rem;
+}
+.branch {
+  padding: 1.1rem 1.2rem 1.25rem;
+  background: var(--card);
+  border-top: 0.45rem solid;
+}
+.branch h2 { margin: 0 0 0.35rem; font-size: 1.15rem; }
+.branch p { margin: 0; color: var(--muted); }
+.pass { border-color: var(--go); }
+.pass h2 { color: var(--go); }
+.fail { border-color: var(--stop); }
+.fail h2 { color: var(--stop); }
+
+@media (max-width: 34rem) {
+  .branches { grid-template-columns: 1fr; }
+}
+
+/* One orchestrated moment: the track draws itself on load */
+@media (prefers-reduced-motion: no-preference) {
+  .route::before {
+    transform-origin: top;
+    animation: draw 1.4s cubic-bezier(.6, 0, .2, 1) both;
+  }
+  @keyframes draw { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+}
